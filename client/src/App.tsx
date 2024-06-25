@@ -25,7 +25,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({ events }) => (
       events={events}
       startAccessor="startDate"
       endAccessor="endDate"
-      // style={{ height: 1000, width: 1000 }}
     />
   </div>
 );
