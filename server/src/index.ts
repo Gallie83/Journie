@@ -23,7 +23,7 @@ app.post('/api/journal-entries', async (req, res) => {
     });
     res.json(newEntry);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res);
   }
 });
 
@@ -32,7 +32,7 @@ app.get('/api/journal-entries', async (req, res) => {
     const entries = await prisma.journalEntry.findMany();
     res.json(entries);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    handleError(error, res);
   }
 });
 
@@ -42,3 +42,11 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+function handleError(error: unknown, res: express.Response) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' });
+    }
+  }
