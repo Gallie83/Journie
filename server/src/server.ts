@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 
 app.use(bodyParser.json());
 
+// Create new journal entry
 app.post('/api/journal-entries', async (req, res) => {
   const { title, startDate, endDate, startTime, endTime, content, images } = req.body;
   try {
@@ -27,6 +28,7 @@ app.post('/api/journal-entries', async (req, res) => {
   }
 });
 
+// Retrieve existing entry
 app.get('/api/journal-entries', async (req, res) => {
   try {
     const entries = await prisma.journalEntry.findMany();
@@ -43,6 +45,7 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+// To return any error messages
 function handleError(error: unknown, res: express.Response) {
     if (error instanceof Error) {
       res.status(500).json({ error: error.message });
