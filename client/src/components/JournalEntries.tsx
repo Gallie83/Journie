@@ -28,6 +28,7 @@ useEffect(() => {
   return (
     <div>
       <h1>Journal Entries</h1>
+      <button>New Entry</button>
       <ul>
         {entries.map(entry => (
           <li key={entry.id}>

@@ -38,7 +38,43 @@ app.get('/api/journal-entries', async (req, res) => {
   }
 });
 
-// Add update and delete routes here
+// Update existing entry
+app.put('/api/journal-entries/:id', async(req,res) => {
+  const {id} = req.params;
+  const {title, startDate, endDate, startTime, endTime, content, images} = req.body;
+
+  try {
+    const updatedEntry = await prisma.journalEntry.update({
+      where: {id: Number(id)},
+      data: {
+        title,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        startTime: new Date(startTime),
+        endTime: new Date(endTime),
+        content,
+        images,
+      },
+    });
+    res.json(updatedEntry);
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+})
+
+// Delete an entry
+app.delete('/api/journal-entries/:id', async (req,res) => {
+  const {id} = req.params;
+
+  try {
+    await prisma.journalEntry.delete({
+      where: {id: Number(id)},
+    });
+    res.json({ message: 'Journal entry deleted'});
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
