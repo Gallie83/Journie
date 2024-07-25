@@ -13,7 +13,7 @@ export interface journalEntry {
     startTime: Date;
     endTime: Date;
     content: string;
-    images: string[]
+    images: string[];
 }
 
 // Function to retrieve all journal entries
@@ -22,7 +22,15 @@ export const getJournalEntries = (): Promise<journalEntry[]> => {
 };
 
 // Function to retrieve all journal entries
-export const createJournalEntries = (entryData: journalEntry): Promise<journalEntry> => {
-    return api.post<journalEntry>('/journal-entries', entryData).then(response => response.data);
+export const createJournalEntries = (entry: journalEntry): Promise<journalEntry> => {
+    return api.post<journalEntry>('/journal-entries', entry).then(response => response.data);
 };
 
+export const updateJournalEntries = async (id:number, entry: journalEntry): Promise<journalEntry> => {
+    const response = await api.put<journalEntry>(`/journal-entries/${id}`, entry);
+    return response.data;
+}
+
+export const deleteJournalEntry = async (id:number): Promise<void> => {
+    await api.delete(`/journal-entries/${id}`);
+}
