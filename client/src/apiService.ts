@@ -26,11 +26,13 @@ export const createJournalEntries = (entry: journalEntry): Promise<journalEntry>
     return api.post<journalEntry>('/journal-entries', entry).then(response => response.data);
 };
 
+// To update existing entries
 export const updateJournalEntries = async (id:number, entry: journalEntry): Promise<journalEntry> => {
     const response = await api.put<journalEntry>(`/journal-entries/${id}`, entry);
     return response.data;
 }
 
+// TO delete existing entry
 export const deleteJournalEntry = async (id:number): Promise<void> => {
     await api.delete(`/journal-entries/${id}`);
 }
