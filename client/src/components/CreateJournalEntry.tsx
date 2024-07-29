@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { createJournalEntries } from "../apiService";
+import { createJournalEntry } from "../apiService";
 
 
 const CreateJournalEntry: React.FC = () => {
