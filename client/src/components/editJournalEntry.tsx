@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getJournalEntries, updateJournalEntry, journalEntry } from '../apiService';
 
 
 const EditJournalEntry: React.FC = () => {
     const {id} = useParams<{id:string}>();
-    const history = useHistory();
-    const [entry, setEntry] = useState<JournalEntry | null>(null);
+    const navigate = useNavigate();
+    const [entry, setEntry] = useState<journalEntry | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchEntry = async () => {
             try {
                 const data = await getJournalEntries();
-                const selectedEntry = data.find((e:JournalEntry) => e.id === Number(id));
-                setEntry(selectedEntry);
+                const selectedEntry = data.find((e:journalEntry) => e.id === Number(id));
+                if (selectedEntry) {
+                    setEntry(selectedEntry);
+                } else {
+                    setError('Journal entry not found');
+                }
             } catch(err) {
                 setError((err as Error).message);
             }
@@ -28,7 +32,7 @@ const EditJournalEntry: React.FC = () => {
         if (entry) {
             try {
                 await updateJournalEntry(Number(id), entry);
-                history.push('/jounral-entries');
+                navigate('/jounral-entries');
             } catch (err) {
                 setError((err as Error).message);
             }
@@ -49,19 +53,19 @@ const EditJournalEntry: React.FC = () => {
             </div>
             <div>
                 <label>Start Date</label>
-                <input type="text" name='startDate' value={entry.startDate} onChange={handleChange} required />
+                <input type="text" name='startDate' value={entry.startDate.toISOString().substring(0, 10)} onChange={handleChange} required />
             </div>
             <div>
                 <label>End Date</label>
-                <input type="text" name='endDate' value={entry.endDate} onChange={handleChange} required />
+                <input type="text" name='endDate' value={entry.endDate.toISOString().substring(0, 10)} onChange={handleChange} required />
             </div>
             <div>
                 <label>Start Time</label>
-                <input type="text" name='startTime' value={entry.startTime} onChange={handleChange} required />
+                <input type="text" name='startTime' value={entry.startTime.toISOString().substring(11, 16)} onChange={handleChange} required />
             </div>
             <div>
                 <label>End Time</label>
-                <input type="text" name='endTime' value={entry.endTime} onChange={handleChange} required />
+                <input type="text" name='endTime' value={entry.endTime.toISOString().substring(11, 16)} onChange={handleChange} required />
             </div>
             <div>
                 <label>Content</label>
